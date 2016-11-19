@@ -1,3 +1,4 @@
+from urllib.parse import quote_plus
 from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib import messages
@@ -39,11 +40,13 @@ def post_list(request):
     #     }
     #
 
-def post_detail(request, id):
-    instance = get_object_or_404(Post, id=id)
+def post_detail(request, slug):
+    instance = get_object_or_404(Post, slug=slug)
+    share_string = quote_plus(instance.content)
     context = {
         "title": instance.title,
         "instance" : instance,
+        "share_string" : share_string
     }
 
     return render(request,"detail.html",context)
@@ -69,8 +72,8 @@ def post_create(request):
     return render(request, "form.html", context)
 
 
-def post_update(request, id):
-    instance = get_object_or_404(Post, id=id)
+def post_update(request, slug):
+    instance = get_object_or_404(Post, slug=slug)
     form = PostForm(request.POST or None, request.FILES or None,instance = instance)
     if form.is_valid():
         instance = form.save(commit=False)
@@ -86,8 +89,8 @@ def post_update(request, id):
 
     return render(request, "form.html", context)
 
-def post_delete(request,id):
-    instance = get_object_or_404(Post, id=id)
+def post_delete(request,slug):
+    instance = get_object_or_404(Post, slug=slug)
     messages.success(request, "Successfully deleted!")
     instance.delete()
     return redirect("post:list")
