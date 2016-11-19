@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+
+{%  block head_title %} {{ instance.title }} | {{ block.super }} {% endblock head_title %}
+
+{% block content %}
+    <div class="col-sm-8 col-sm-offset-1">
+
+    <h1> {{ title }} </h1>
+    <h2>
+        <small>{{ instance.timestamp }}</small>
+    </h2>
+    <hr/>
+        {%  if instance.image %}
+            <img src="{{ instance.image.url }}" class="img-responsive"/>
+        {% endif %}
+    <hr/>
+
+     </div>
+    <div class="col-sm-6 col-sm-offset-1" >
+        {{ instance.content | linebreaks }}<br/>
+    <a href="{% url "post:list" %}" class="btn btn-primary" role="button">Return</a>
+    </div>
+
+
+
+
+
+
+{% endblock %}
